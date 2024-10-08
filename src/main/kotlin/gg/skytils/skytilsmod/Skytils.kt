@@ -538,9 +538,9 @@ class Skytils {
     fun onConnect(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
         Utils.lastNHPC = event.handler as? NetHandlerPlayClient
         Utils.isOnHypixel = mc.runCatching {
-            !event.isLocal && (thePlayer?.clientBrand?.lowercase()?.contains("hypixel")
-                ?: currentServerData?.serverIP?.lowercase()?.contains("hypixel") ?: false)
-        }.onFailure { it.printStackTrace() }.getOrDefault(false)
+            !event.isLocal && (thePlayer?.clientBrand?.lowercase()?.contains("fakepixel")
+                ?: currentServerData?.serverIP?.lowercase()?.contains("fakepixel") ?: true)
+        }.onFailure { it.printStackTrace() }.getOrDefault(true)
 
         IO.launch {
             TrophyFish.loadFromApi()
@@ -559,7 +559,7 @@ class Skytils {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     fun onPacket(event: MainReceivePacketEvent<*, *>) {
         if (event.packet is S01PacketJoinGame) {
-            Utils.skyblock = false
+            Utils.skyblock = true
             Utils.dungeons = false
         }
         if (!Utils.inSkyblock && Utils.isOnHypixel && event.packet is S3DPacketDisplayScoreboard && event.packet.func_149371_c() == 1) {
@@ -601,7 +601,7 @@ class Skytils {
     fun onDisconnect(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
         Utils.lastNHPC = null
         Utils.isOnHypixel = false
-        Utils.skyblock = false
+        Utils.skyblock = true
         Utils.dungeons = false
 
         IO.launch {
